@@ -17,7 +17,6 @@ faceClassif = cv2.CascadeClassifier(cv2.data.haarcascades+'haarcascade_frontalfa
 count = 0
 
 while True:
-
 	ret, frame = cap.read()
 	if ret == False: break
 	frame =  imutils.resize(frame, width=640)
@@ -34,9 +33,13 @@ while True:
 		count = count + 1
 	cv2.imshow('frame',frame)
 
+	"""
 	k =  cv2.waitKey(1)
-	if k == 27 or count >= 100:
+	if k == 27 or count >= 200:
 		break
-
+	"""
+	k =  cv2.waitKey(1)
+	if k == ord('q'): #cierra el programa al precionar q
+		break
 cap.release()
 cv2.destroyAllWindows()

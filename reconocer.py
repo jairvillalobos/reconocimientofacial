@@ -1,21 +1,18 @@
 import cv2 as cv
 import os
-from pynput.keyboard import Listener
-from pynput import keyboard
+
 
 dataPath = 'bank_data' 
 #Cambia a la ruta donde hayas almacenado Data
 imagePaths = os.listdir(dataPath)
 print('imagePaths=',imagePaths)
 
-#face_recognizer = cv.face.EigenFaceRecognizer_create()
-#face_recognizer = cv.face.FisherFaceRecognizer_create()
+
 face_recognizer = cv.face.LBPHFaceRecognizer_create() 
 
 # Leyendo el modelo
-#face_recognizer.read('modeloEigenFace.xml')
-#face_recognizer.read('modeloFisherFace.xml')
 face_recognizer.read('modeloLBPHFace.xml')
+
 
 cap = cv.VideoCapture(0)
 #cap = cv.VideoCapture('Video.mp4')
@@ -35,24 +32,6 @@ while True:
 		rostro = cv.resize(rostro,(150,150),interpolation= cv.INTER_CUBIC)
 		result = face_recognizer.predict(rostro)
 
-		cv.putText(frame,'{}'.format(result),(x,y-5),1,1.3,(255,255,0),1,cv.LINE_AA)
-		'''
-		# EigenFaces
-		if result[1] < 5700:
-			cv.putText(frame,'{}'.format(imagePaths[result[0]]),(x,y-25),2,1.1,(0,255,0),1,cv.LINE_AA)
-			cv.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
-		else:
-			cv.putText(frame,'Desconocido',(x,y-20),2,0.8,(0,0,255),1,cv.LINE_AA)
-			cv.rectangle(frame, (x,y),(x+w,y+h),(0,0,255),2)
-		
-		# FisherFace
-		if result[1] < 500:
-			cv.putText(frame,'{}'.format(imagePaths[result[0]]),(x,y-25),2,1.1,(0,255,0),1,cv.LINE_AA)
-			cv.rectangle(frame, (x,y),(x+w,y+h),(0,255,0),2)
-		else:
-			cv.putText(frame,'Desconocido',(x,y-20),2,0.8,(0,0,255),1,cv.LINE_AA)
-			cv.rectangle(frame, (x,y),(x+w,y+h),(0,0,255),2)
-		'''
 		# LBPHFace
 		if result[1] < 70:
 			cv.putText(frame,'{}'.format(imagePaths[result[0]]),(x,y-25),2,1.1,(0,255,0),1,cv.LINE_AA)
@@ -62,18 +41,11 @@ while True:
 			cv.rectangle(frame, (x,y),(x+w,y+h),(0,0,255),2)
 		
 	cv.imshow('frame',frame)
-	k = cv.waitKey(1)
-	if k == 27:
+
+	
+	k = cv.waitKey(1)  
+	if k == ord('q'): #cierra el programa al precionar q
 		break
 
-"""	def exitapp(key):
-		key = str(key)		
-		if key == "Key.esc":
-			exit()
-		else:
-			print("error")
-	with Listener(on_press=exitapp) as listener:
-		listener.join()
-"""
 cap.release()
 cv.destroyAllWindows()
